@@ -3,6 +3,7 @@
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import dotenv from "dotenv";
+import { notifyClockIn, checkAndUpdateLock } from "./check-company-network.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,6 +29,10 @@ const timeWorking = todayTimeEntries.reduce((total, entry) => {
 const hours = Math.floor(timeWorking / 3600000);
 const minutes = Math.floor((timeWorking % 3600000) / 60000);
 
+if (!isWorking && (await checkAndUpdateLock())) {
+  notifyClockIn();
+}
+
 // Print the status
 let text,
   color = "#FFFFFF";
@@ -44,7 +49,7 @@ if (isWorking) {
   } else if (minutes > 0 || hours > 0) {
     text = `Not working: ${hours}h ${minutes}m`;
   } else {
-    text = `Not working`;
+    text = `Out of office`;
   }
 }
 
