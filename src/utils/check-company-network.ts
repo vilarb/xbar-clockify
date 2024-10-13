@@ -4,7 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { exec } from "child_process";
-import { clockIn } from "./api.mjs";
+import { clockIn } from "../api/clockify-api.js";
 import fs from "fs/promises";
 
 // Function to notify user to clock in when connected to company network
@@ -25,7 +25,7 @@ export const notifyClockIn = async () => {
           return;
         }
         // Extract and return the network name
-        resolve(stdout.split(":").pop().trim());
+        resolve(stdout.split(":").pop()?.trim());
       });
     });
   };
@@ -71,12 +71,12 @@ export const checkAndUpdateLock = async () => {
     const now = new Date();
 
     // Check if the lock duration has passed
-    if (now - stats.mtime > LOCK_DURATION) {
+    if (now.getTime() - stats.mtime.getTime() > LOCK_DURATION) {
       // If so, update the lock file
       await fs.writeFile(LOCK_FILE, "");
       return true; // Indicate that the lock was updated
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === "ENOENT") {
       // If the lock file doesn't exist, create it
       await fs.writeFile(LOCK_FILE, "");

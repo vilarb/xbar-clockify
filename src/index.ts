@@ -1,28 +1,29 @@
 #!/usr/bin/env /usr/local/bin/node
-
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import dotenv from "dotenv";
-import { notifyClockIn, checkAndUpdateLock } from "./check-company-network.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-dotenv.config({ path: join(__dirname, ".env") });
+import { loadEnv } from "./utils/env-loader.js";
+loadEnv();
+
+import { XbarOptionsFixed } from "./types/xbar";
+import { notifyClockIn, checkAndUpdateLock } from "./utils/check-company-network.js";
 
 import xbar, { separator } from "xbar";
-import { getTimeEntries } from "./api.mjs";
+import { getTimeEntries } from "./api/clockify-api.js";
 
 const timeEntries = await getTimeEntries();
-const todayTimeEntries = timeEntries.filter((entry) => entry.timeInterval.start.startsWith(new Date().toISOString().split("T")[0]));
+const todayTimeEntries = timeEntries.filter((entry: any) => entry.timeInterval.start.startsWith(new Date().toISOString().split("T")[0]));
 
-const isWorking = todayTimeEntries.some((entry) => !entry.timeInterval.end);
+const isWorking = todayTimeEntries.some((entry: any) => !entry.timeInterval.end);
 
 // Calculate total time worked today
-const timeWorking = todayTimeEntries.reduce((total, entry) => {
+const timeWorking = todayTimeEntries.reduce((total: number, entry: any) => {
   const start = new Date(entry.timeInterval.start);
   const end = entry.timeInterval.end ? new Date(entry.timeInterval.end) : new Date();
-  return total + (end - start);
+  return total + (end.getTime() - start.getTime());
 }, 0);
 
 // Convert milliseconds to hours and minutes
@@ -77,4 +78,4 @@ xbar([
     text: "Check my time",
     href: `https://app.clockify.me/tracker`,
   },
-]);
+] as XbarOptionsFixed[]);

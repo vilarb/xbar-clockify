@@ -12,7 +12,7 @@ export const clockIn = async () => {
     method: "POST",
     headers: myHeaders,
     body: raw,
-    redirect: "follow",
+    redirect: "follow" as RequestRedirect,
   };
 
   const response = await fetch(`${process.env.BASE_URL}/v1/workspaces/${process.env.WORKSPACE_ID}/user/${process.env.MY_USER_ID}/time-entries`, requestOptions);
@@ -32,7 +32,7 @@ export const clockOut = async () => {
     method: "PATCH",
     headers: myHeaders,
     body: raw,
-    redirect: "follow",
+    redirect: "follow" as RequestRedirect,
   };
 
   const response = await fetch(`${process.env.BASE_URL}/v1/workspaces/${process.env.WORKSPACE_ID}/user/${process.env.MY_USER_ID}/time-entries`, requestOptions);
@@ -48,7 +48,7 @@ export const getTimeEntries = async () => {
   const requestOptions = {
     method: "GET",
     headers: myHeaders,
-    redirect: "follow",
+    redirect: "follow" as RequestRedirect,
   };
 
   const response = await fetch(`${process.env.BASE_URL}/v1/workspaces/${process.env.WORKSPACE_ID}/user/${process.env.MY_USER_ID}/time-entries`, requestOptions);
