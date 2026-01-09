@@ -1,6 +1,18 @@
-# xbar-clockify
+# Xbar + Clockify
 
 Xbar wrapper for Clockify - A menubar app to track your time using Clockify.
+
+## About
+
+This project was something I made while I was a bit bored and should be taken as such. It's a simple integration that works for my needs, but don't expect it to be a polished, production-ready solution.
+
+## What is xbar?
+
+[xbar](https://xbarapp.com/) (formerly BitBar) is a tool that allows you to display information from any script or program in your macOS menubar. It's perfect for creating custom menubar utilities that display data, status information, or provide quick access to actions.
+
+## What is Clockify?
+
+[Clockify](https://clockify.me/) is a free time tracking and timesheet software that allows teams to track work hours across projects. It provides a web interface and API for tracking time entries, which this project uses to integrate with xbar.
 
 ## Description
 
@@ -57,6 +69,10 @@ This command will:
 
 1. Compile TypeScript files to JavaScript
 2. Copy shell scripts to the dist folder
+
+### Note on Shell Scripts
+
+The shell scripts in the `actions` folder (`clock_in.sh` and `clock_out.sh`) exist because xbar is unable to set a path to the Node.js executable. This is a bit of a stupid workaround that allows the scripts to find and execute the Node.js runtime directly. There is likely another solution (perhaps using an absolute path or a different approach), but this was fine for me and works reliably.
 
 ## Running the Application
 
